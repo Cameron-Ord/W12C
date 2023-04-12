@@ -3,8 +3,10 @@ let indentity = document.querySelector(`#section_main`);
 indentity.insertAdjacentHTML(`beforeend`,`
 <article>
 <span>
-<input type="value"> <button id="email_button">Email</button>
-<input type="value"> <button id="password_button">Password</button>
+<input id="email_input" type="value">
+<input id="pass_input" type="value"> 
+
+<button id="login">Login</button
 </span>
 </article>
 ` );
@@ -15,28 +17,29 @@ indentity.insertAdjacentHTML(`beforeend`,`
 function PW_POST_FAILURE(){
     let output = document.querySelector(`#section_main`);
 
-    output.insertAdjacentHTML(`beforeend`, `<h3>failure</h3>`);
+    output.insertAdjacentHTML(`beforeend`, `<h3>Invalid login</h3>`);
 
-};
+
+}
 
 function PW_POST_SUCCESS(response){
 
-    Cookies.set(`token`, response[`data`][`token`]);
-    window[`location`] = `/pages/logout.html`;
+    Cookies.set(`token`, `${response[`data`][`token`]}`);
+    window[`location`] = `/pages/home.html`;
 
 
-};
+}
 
 
 
 
-function API_PWEM(){
+function User_Login(){
 
-    let pw_input = document.querySelector(`#password_button`);
+    let pw_input = document.querySelector(`#pass_input`);
 
     let pw_input_value = pw_input[`value`];
 
-    let em_input = document.querySelector(`#email_button`);
+    let em_input = document.querySelector(`#email_input`);
 
     let em_input_value = em_input[`value`];
 
@@ -59,8 +62,35 @@ function API_PWEM(){
     }).then(PW_POST_SUCCESS).catch(PW_POST_FAILURE);
 
 
-};
+}
 
-let pw_button = document.querySelector(`#password_button`);
+let pw_button = document.querySelector(`#login`);
 
-pw_button.addEventListener(`click`, API_PWEM)
+pw_button.addEventListener(`click`, User_Login);
+
+
+let Login_cookie = Cookies.get(`token`);
+
+
+if(Login_cookie !== undefined){
+
+
+indentity.insertAdjacentHTML(`beforeend`, `<button id="logout_button">logout</button>`);
+    
+}
+
+
+
+
+
+function remove_cookie(){
+
+    Cookies.remove(`token`);
+    
+    
+    }
+    
+    let logout_index = document.querySelector(`#logout_button`);
+    
+    logout_index.addEventListener(`click`, remove_cookie);
+    
